@@ -1,11 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 
 namespace Learning.DesignPatterns.Domain.Models
 {
     public class Order
     {
-        public decimal Amount { get; set; }
+        public Guid OrderId { get; private set; }
+
+        public virtual ICollection<LineItem> LineItems { get; set; }
+
+        public virtual Customer Customer { get; set; }
+        public Guid CustomerId { get; set; }
+
+        public DateTime OrderDate { get; set; }
+
+        public decimal OrderTotal => LineItems.Sum(item => item.Product.Price * item.Quantity);
+
+        public Order()
+        {
+            OrderId = Guid.NewGuid();
+
+            OrderDate = DateTime.UtcNow;
+        }
     }
 }
